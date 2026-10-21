@@ -13,7 +13,6 @@ client_scripts {
 }
 
 server_scripts {
-    'server/framework.lua',
     'server/logs.lua',
     'server/server.lua',
 }

@@ -1,7 +1,5 @@
 local Config = {}
 
-Config.Framework = 'auto'
-
 Config.MoneyItem = 'money'
 
 Config.BlockedStates = { 'HouseRobberyActive' }

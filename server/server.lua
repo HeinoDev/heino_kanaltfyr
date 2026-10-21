@@ -113,11 +113,9 @@ local function IsNearTrader(Source, Name)
 end
 
 local function Pay(Source, Trader, Payout, Amount, ItemName)
-    if Trader.Currency.Type == 'Item' then
-        exports.ox_inventory:AddItem(Source, Trader.Currency.Value, Payout)
-    else
-        Framework.AddMoney(Source, Trader.Currency.Value, Payout, locale('MoneyReason', Amount, ItemName))
-    end
+    local PayItem = Trader.Currency.Value == 'cash' and Config.MoneyItem or Trader.Currency.Value
+
+    exports.ox_inventory:AddItem(Source, PayItem, Payout)
 end
 
 lib.callback.register('heino_kanaltfyr:server:SellItem', function(Source, Data)

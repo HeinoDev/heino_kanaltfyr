@@ -3,7 +3,7 @@
 Fence NPC for FiveM. Sell items to a trader at market prices that change over time.
 
 - Requires `ox_lib`, `ox_inventory`, `ox_target`
-- Money on ESX, QBCore, Qbox or as an `ox_inventory` item. Set `Config.Framework = 'ox'` and `Config.MoneyItem` for fully standalone
+- Pays out as an `ox_inventory` item. `Config.MoneyItem` sets the cash item name
 - Prices re-roll on an interval, one "in demand" item per trader
 - Server validates distance, amount, item and price
 - Locales: `da`, `en`
@@ -21,7 +21,7 @@ Fence NPC for FiveM. Sell items to a trader at market prices that change over ti
 AddEventHandler('heino_kanaltfyr:server:Ready', function()
     exports['heino_kanaltfyr']:RegisterTrader('HouseRobbery', {
         Label = 'Kanal-fyren',
-        Currency = { Type = 'Money', Value = 'cash' },
+        Currency = { Value = 'cash' },
         Items = {
             { Item = 'goldchain', Label = 'Gold chain', Price = 450, Time = 400 },
         },
@@ -29,7 +29,7 @@ AddEventHandler('heino_kanaltfyr:server:Ready', function()
 end)
 ```
 
-`Type = 'Item'` pays out an item instead of money. `Time` is ms per unit. Trader positions and market settings are in `config.lua`.
+`Currency.Value` is the item paid out, `'cash'` uses `Config.MoneyItem`. `Time` is ms per unit. Trader positions and market settings are in `config.lua`.
 
 ## Exports
 
