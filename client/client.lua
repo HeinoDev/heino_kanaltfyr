@@ -1,6 +1,6 @@
 local Config = lib.load('config')
 
-lib.locale()
+lib.locale(Config.Locale)
 
 local function IsBlockedByState()
     for i = 1, #Config.BlockedStates do
@@ -76,7 +76,7 @@ end)
 
 local Peds = {}
 
-for Name, Data in pairs(Config.Traders) do
+local function SetupTrader(Name, Data)
     local Model = joaat(Data.PedModel)
 
     if Data.Blip then
@@ -128,6 +128,12 @@ for Name, Data in pairs(Config.Traders) do
         end
     })
 end
+
+CreateThread(function()
+    local Locations = lib.callback.await('heino_kanaltfyr:server:GetLocations', false)
+
+    for Name, Data in pairs(Locations) do SetupTrader(Name, Data) end
+end)
 
 AddEventHandler('onResourceStop', function(Resource)
     if Resource ~= GetCurrentResourceName() then return end

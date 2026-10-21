@@ -29,7 +29,7 @@ AddEventHandler('heino_kanaltfyr:server:Ready', function()
 end)
 ```
 
-`Currency.Value` is the item paid out, `'cash'` uses `Config.MoneyItem`. `Time` is ms per unit. Trader positions and market settings are in `config.lua`.
+`Currency.Value` is the item paid out, `'cash'` uses `Config.MoneyItem`. `Time` is ms per unit. Market settings and `Locale` are in `config.lua`. Trader positions live in `server/traders.lua`, which is never sent to clients.
 
 ## Exports
 

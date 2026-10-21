@@ -1,10 +1,11 @@
 local Config = lib.load('config')
+local Locations = lib.load('server.traders')
 
 local Traders = {}
 local Market = {}
 local NextRoll = os.time() + Config.Market.Interval * 60
 
-lib.locale()
+lib.locale(Config.Locale)
 
 local function RollMultiplier()
     return Config.Market.MinMultiplier + math.random() * (Config.Market.MaxMultiplier - Config.Market.MinMultiplier)
@@ -84,6 +85,8 @@ end)
 exports('GetTraders', function() return Traders end)
 exports('GetTrader', function(Name) return Traders[Name] end)
 
+lib.callback.register('heino_kanaltfyr:server:GetLocations', function() return Locations end)
+
 lib.callback.register('heino_kanaltfyr:server:GetTrader', function(_, Name)
     local View = BuildTraderView(Name)
     if not View then lib.print.warn(('[Kanaltfyr] Trader not registered: %s'):format(tostring(Name))) end
@@ -103,7 +106,7 @@ local function IsBlockedByState(Source)
 end
 
 local function IsNearTrader(Source, Name)
-    local Data = Config.Traders[Name]
+    local Data = Locations[Name]
     if not Data then return false end
 
     local Ped = GetPlayerPed(Source)
