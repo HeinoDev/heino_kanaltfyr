@@ -3,11 +3,9 @@
     "SellEverything": "Sælg alt",
     "Hot": "Efterspurgt",
     "OnlyOwned": "Kun det jeg har",
-    "Owned": "Har",
     "TotalValue": "Samlet værdi",
     "PricesChangeIn": "Priser ændres om",
     "NothingToSell": "Du har ikke noget at sælge her",
-    "MoneyReason": "Solgt %dx %s",
     "Notify": {
         "Error": "Fejl",
         "Success": "Success",
