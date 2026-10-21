@@ -1,0 +1,17 @@
+{
+    "Sell": "Sell",
+    "SellEverything": "Sell Everything",
+    "Hot": "In demand",
+    "OnlyOwned": "Only what I have",
+    "Owned": "Owned",
+    "TotalValue": "Total value",
+    "PricesChangeIn": "Prices change in",
+    "NothingToSell": "You have nothing to sell here",
+    "MoneyReason": "Sold %dx %s",
+    "Notify": {
+        "Error": "Error",
+        "Success": "Success",
+        "ItemSold": "You sold %s for %s",
+        "SomethingWentWrong": "Something went wrong"
+    }
+}
