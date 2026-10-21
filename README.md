@@ -3,7 +3,7 @@
 Fence NPC for FiveM. Sell items to a trader at market prices that change over time.
 
 - Requires `ox_lib`, `ox_inventory`, `ox_target`
-- Money on ESX, QBCore, Qbox or as an `ox_inventory` item
+- Money on ESX, QBCore, Qbox or as an `ox_inventory` item. Set `Config.Framework = 'ox'` and `Config.MoneyItem` for fully standalone
 - Prices re-roll on an interval, one "in demand" item per trader
 - Server validates distance, amount, item and price
 - Locales: `da`, `en`

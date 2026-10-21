@@ -2,6 +2,8 @@ local Config = {}
 
 Config.Framework = 'auto'
 
+Config.MoneyItem = 'money'
+
 Config.BlockedStates = { 'HouseRobberyActive' }
 
 Config.ImageUrl = 'nui://ox_inventory/web/images/'

@@ -36,7 +36,7 @@ function Adapters.qb(Source, Account, Amount, Reason)
 end
 
 function Adapters.ox(Source, Account, Amount)
-    return exports.ox_inventory:AddItem(Source, Account == 'cash' and 'money' or Account, Amount) and true or false
+    return exports.ox_inventory:AddItem(Source, Account == 'cash' and Config.MoneyItem or Account, Amount) and true or false
 end
 
 function Framework.GetName()
