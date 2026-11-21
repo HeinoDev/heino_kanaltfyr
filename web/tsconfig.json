@@ -22,6 +22,5 @@
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
-	"exclude": ["node_modules/*", "__sapper__/*", "public/*"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

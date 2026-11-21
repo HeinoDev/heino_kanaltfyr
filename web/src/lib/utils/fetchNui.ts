@@ -1,14 +1,9 @@
 import { isEnvBrowser } from "./misc";
 
-export async function fetchNui<T = any>(
-	eventName: string,
-	data?: any,
-	mock?: { data: T; delay?: number },
-): Promise<T> {
-	if (isEnvBrowser()) {
-		if (!mock) return await new Promise((resolve) => resolve);
-		await new Promise((resolve) => setTimeout(resolve, mock.delay));
-		return mock.data;
+export async function fetchNui<T = any>(eventName: string, data?: any): Promise<T> {
+	if (import.meta.env.DEV && isEnvBrowser()) {
+		const { mockNui } = await import("./debugData");
+		return (await mockNui(eventName, data)) as T;
 	}
 
 	const options = {

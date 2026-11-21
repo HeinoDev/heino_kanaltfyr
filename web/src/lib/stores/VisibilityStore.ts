@@ -1,8 +1,7 @@
 import { writable, get } from "svelte/store";
-import { isEnvBrowser } from "$lib/utils/misc";
 import { fetchNui } from "$lib/utils/fetchNui";
 
-const visibility = writable(isEnvBrowser());
+const visibility = writable(false);
 
 export const visibilityStore = {
 	subscribe: visibility.subscribe,
@@ -54,8 +53,8 @@ export function CloseTrader() {
 	if (get(Closing) || !get(visibility)) return;
 
 	Closing.set(true);
+	void fetchNui("HideUI");
 	setTimeout(() => {
-		fetchNui("HideUI");
 		visibilityStore.hide();
 		Closing.set(false);
 	}, CLOSE_DURATION);

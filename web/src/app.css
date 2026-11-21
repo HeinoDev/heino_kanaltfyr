@@ -1,6 +1,43 @@
+@import "@fontsource-variable/inter";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.trader-window {
+    --background: #121212;
+    --surface: #1a1a1a;
+    --field: #1e1e1e;
+    --border: #333333;
+    --ink: #f5f6f8;
+    --muted: #a5aab4;
+    --blue: #60a5fa;
+    --primary: #2563eb;
+    --green: #86dca5;
+    --red: #fda4a4;
+    color-scheme: dark;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--ink);
+    font: 14px/1.5 "Inter Variable", Inter, system-ui, sans-serif;
+    box-shadow: 0 20px 70px rgb(0 0 0 / 48%);
+}
+
+.trader-window :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+.trader-header { background: var(--surface); }
+.trader-field { background: var(--field); }
+.trader-items { scrollbar-width: none; }
+.trader-items::-webkit-scrollbar { display: none; }
+.trader-close { color: var(--muted); }
+.trader-close:hover { color: #ffb5b5; background: #722323; }
+.trader-filter[aria-pressed="true"] { color: var(--blue); border-color: var(--blue); }
+.trader-action { background: var(--primary); color: white; }
+.trader-action:hover:enabled { background: #1d4ed8; }
 
 .anim-window {
     animation: window-in 0.15s ease-out;

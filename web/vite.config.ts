@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, searchForWorkspaceRoot } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import path from "path";
 
@@ -8,6 +8,9 @@ export default defineConfig({
 	base: "./",
 	build: {
 		outDir: "build",
+	},
+	server: {
+		fs: { allow: [searchForWorkspaceRoot(process.cwd()), path.resolve("../locales")] },
 	},
 	resolve: {
 		alias: {
