@@ -13,7 +13,6 @@ client_scripts {
 }
 
 server_scripts {
-    'server/logs.lua',
     'server/server.lua',
 }
 
@@ -23,6 +22,7 @@ shared_scripts {
 
 files {
     'config.lua',
+    'utils/client.lua',
     'locales/*.json',
     'web/build/index.html',
     'web/build/**/*'

@@ -1,6 +1,6 @@
 local Webhook = ''
 
-KanaltfyrLogs = {}
+local Logs = {}
 
 local function SendWebhook(Message)
     local Payload = {
@@ -11,10 +11,12 @@ local function SendWebhook(Message)
     PerformHttpRequest(Webhook, function() end, 'POST', json.encode(Payload), { ['Content-Type'] = 'application/json' })
 end
 
-function KanaltfyrLogs.Sold(Source, TraderName, ItemName, Amount, Payout)
+function Logs.Sold(Source, TraderName, ItemName, Amount, Payout)
     if Webhook == '' then return end
 
     local message = ('**Player:** %s (%d)\n**Trader:** %s\n**Item:** %s x%d\n**Paid:** %d'):format(GetPlayerName(Source) or 'Unknown', Source, TraderName, ItemName, Amount, Payout)
 
     SendWebhook(message)
 end
+
+return Logs

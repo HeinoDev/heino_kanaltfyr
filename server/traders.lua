@@ -16,7 +16,9 @@ return {
         --   WORLD_HUMAN_CLIPBOARD        writing on a clipboard
         --   WORLD_HUMAN_BUM_STANDING     standing like a homeless person
         Scenario = 'WORLD_HUMAN_SMOKING',
-        Coords = vec4(1391.08, -1508.34, 58.43, 30.0),
+        Coordinates = {
+            vec4(1391.08, -1508.34, 58.43, 30.0),
+        },
         Target = {
             Label = 'Snak med kanal-fyren',
             Icon = 'fa-solid fa-sack-dollar',

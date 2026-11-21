@@ -1,11 +1,11 @@
 local Config = lib.load('config')
 local Locations = lib.load('server.traders')
+local Traders = lib.load('server.stock')
+local Inventory = lib.load('utils.inventory')
+local Logs = lib.load('utils.logs')
 
-local Traders = {}
 local Market = {}
 local NextRoll = os.time() + Config.Market.Interval * 60
-
-lib.locale(Config.Locale)
 
 local function RollMultiplier()
     return Config.Market.MinMultiplier + math.random() * (Config.Market.MaxMultiplier - Config.Market.MinMultiplier)
@@ -28,6 +28,8 @@ local function RollMarket(Name)
 
     Market[Name] = Prices
 end
+
+for Name in pairs(Traders) do RollMarket(Name) end
 
 local function GetMarketEntry(Name, ItemName)
     local Prices = Config.Market.Enabled and Market[Name]
@@ -112,36 +114,54 @@ local function IsNearTrader(Source, Name)
     local Ped = GetPlayerPed(Source)
     if not Ped or Ped == 0 then return false end
 
-    return #(GetEntityCoords(Ped) - Data.Coords.xyz) <= Config.InteractDistance
+    local PlayerCoords = GetEntityCoords(Ped)
+    for _, Coords in ipairs(Data.Coordinates or { Data.Coords }) do
+        if #(PlayerCoords - Coords.xyz) <= Config.InteractDistance then return true end
+    end
+    return false
 end
 
-local function Pay(Source, Trader, Payout, Amount, ItemName)
-    local PayItem = Trader.Currency.Value == 'cash' and Config.MoneyItem or Trader.Currency.Value
-
-    exports.ox_inventory:AddItem(Source, PayItem, Payout)
-end
+local ActiveSales = {}
 
 lib.callback.register('heino_kanaltfyr:server:SellItem', function(Source, Data)
-    if IsBlockedByState(Source) then return false end
+    if ActiveSales[Source] or IsBlockedByState(Source) then return false end
     if type(Data) ~= 'table' or type(Data.Item) ~= 'table' then return false end
     if type(Data.Trader) ~= 'string' or type(Data.Item.Item) ~= 'string' then return false end
 
     local Trader = Traders[Data.Trader]
     if not Trader or not IsNearTrader(Source, Data.Trader) then return false end
 
-    local Amount = math.floor(tonumber(Data.Amount) or 0)
+    local Amount = tonumber(Data.Amount)
+    if not Amount or Amount ~= Amount or Amount == math.huge or Amount == -math.huge then return false end
+    Amount = math.floor(Amount)
     if Amount < 1 or Amount > Config.MaxSellAmount then return false end
 
     for i = 1, #Trader.Items do
         local TraderItem = Trader.Items[i]
 
         if TraderItem.Item == Data.Item.Item then
+            local PayItem = Trader.Currency.Value == 'cash' and Config.MoneyItem or Trader.Currency.Value
+            if PayItem == TraderItem.Item then return false end
+            if Inventory.CountItem(Source, TraderItem.Item) < Amount then return false end
+
+            local Sale = {}
+            ActiveSales[Source] = Sale
             local Payout = GetCurrentPrice(Data.Trader, TraderItem) * Amount
-
-            if not exports.ox_inventory:RemoveItem(Source, TraderItem.Item, Amount) then return false end
-
-            Pay(Source, Trader, Payout, Amount, TraderItem.Item)
-            KanaltfyrLogs.Sold(Source, Data.Trader, TraderItem.Item, Amount, Payout)
+            local Duration = math.max(0, math.floor(tonumber(TraderItem.Time) or 0)) * Amount
+            Wait(Duration)
+            if ActiveSales[Source] ~= Sale then return false end
+            if IsBlockedByState(Source) or not IsNearTrader(Source, Data.Trader) or Traders[Data.Trader] ~= Trader then
+                ActiveSales[Source] = nil
+                return false
+            end
+            local Completed, Exchanged = pcall(Inventory.Exchange, Source, TraderItem.Item, Amount, PayItem, Payout)
+            if ActiveSales[Source] == Sale then ActiveSales[Source] = nil end
+            if not Completed then
+                lib.print.error(('Kanaltfyr: inventory exchange failed for player %s: %s'):format(Source, Exchanged))
+                return false
+            end
+            if not Exchanged then return false end
+            Logs.Sold(Source, Data.Trader, TraderItem.Item, Amount, Payout)
 
             return Payout
         end
@@ -149,6 +169,9 @@ lib.callback.register('heino_kanaltfyr:server:SellItem', function(Source, Data)
 
     return false
 end)
+
+AddEventHandler('playerDropped', function() ActiveSales[source] = nil end)
+RegisterNetEvent('heino_kanaltfyr:server:CancelSale', function() ActiveSales[source] = nil end)
 
 if Config.Market.Enabled then
     CreateThread(function()

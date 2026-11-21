@@ -4,7 +4,7 @@ Config.Locale = 'en'
 
 Config.MoneyItem = 'money'
 
-Config.BlockedStates = { 'HouseRobberyActive' }
+Config.BlockedStates = {}
 
 Config.ImageUrl = 'nui://ox_inventory/web/images/'
 
